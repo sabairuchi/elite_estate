@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, BedDouble, Bath, Maximize2, MapPin } from 'lucide-react';
+import { Heart, BedDouble, Bath, Maximize2, MapPin, Map } from 'lucide-react';
 import type { Property } from '../types/property';
 
 interface PropertyCardProps {
@@ -88,9 +88,21 @@ export default function PropertyCard({ property, onFavoriteToggle }: PropertyCar
         </div>
 
         {/* Location */}
-        <div className="flex items-center gap-1.5 text-slate-500 text-sm mb-6">
-          <MapPin className="h-4 w-4 shrink-0 text-accent" />
-          <span className="truncate">{property.location}</span>
+        <div className="flex items-center justify-between gap-1.5 text-slate-500 text-sm mb-6">
+          <div className="flex items-center gap-1.5 truncate">
+            <MapPin className="h-4 w-4 shrink-0 text-accent" />
+            <span className="truncate">{property.location}</span>
+          </div>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.address || property.location)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View on Google Maps"
+            onClick={(e) => e.stopPropagation()}
+            className="p-1 rounded-lg text-slate-400 hover:text-accent hover:bg-slate-100 transition-colors shrink-0"
+          >
+            <Map className="h-4 w-4" />
+          </a>
         </div>
 
         {/* Space Divider */}
