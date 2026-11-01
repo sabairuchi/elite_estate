@@ -596,6 +596,12 @@ export default function PropertyMap({
       {/* Top Floating City Quick Jump Bar */}
       {showCityQuickJump && availableCities.length > 1 && !focusProperty && (
         <div className="absolute top-4 left-4 z-30 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-2xl border border-slate-200/80 shadow-lg overflow-x-auto max-w-[calc(100%-6rem)] no-scrollbar">
+          <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-accent/20 text-accent shrink-0">
+            <MapIcon className="h-3.5 w-3.5" />
+          </div>
+          <span className="text-xs font-bold font-poppins text-primary shrink-0 mr-1">
+            Map
+          </span>
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1 flex items-center gap-1 shrink-0">
             <MapIcon className="h-3.5 w-3.5 text-accent" /> Jump To:
           </span>
@@ -628,6 +634,17 @@ export default function PropertyMap({
       {/* Floating Map Custom Controls (Top Right) */}
       {showControls && (
         <div className="absolute top-4 right-4 z-30 flex flex-col gap-2">
+          {/* Map Icon Indicator */}
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/80 shadow-lg p-1 flex items-center justify-center">
+            <button
+              onClick={() => handleRecenter()}
+              title="Interactive Map"
+              className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/15 text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"
+            >
+              <MapIcon className="h-4 w-4" />
+            </button>
+          </div>
+
           {/* Zoom In / Out Group */}
           <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/80 shadow-lg p-1 flex flex-col gap-1">
             <button

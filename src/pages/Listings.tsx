@@ -560,6 +560,21 @@ export default function Listings() {
 
             {/* Sorting & Filter Actions */}
             <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+              {/* Map View Quick Toggle */}
+              <button
+                type="button"
+                onClick={() => setViewMode(viewMode === 'split' ? 'grid' : 'split')}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-poppins font-medium border transition-all cursor-pointer ${
+                  viewMode === 'split' || viewMode === 'map'
+                    ? 'bg-accent/15 border-accent text-accent-dark font-bold'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                }`}
+                title="Toggle Map View"
+              >
+                <Map className="h-3.5 w-3.5 text-accent" />
+                <span className="hidden sm:inline">Map</span>
+              </button>
+
               {/* Landmark POI Map Toggle */}
               <button
                 type="button"
