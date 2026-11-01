@@ -9,10 +9,11 @@ import {
   Check, 
   X, 
   LayoutGrid, 
+  Columns, 
   Map, 
   Compass, 
   Sparkles,
-  ExternalLink
+  HelpCircle
 } from 'lucide-react';
 import { getPublicProperties } from '../utils/db';
 import { ALL_LANDMARKS } from '../data/landmarks';
@@ -44,7 +45,7 @@ export default function Listings() {
   const [allProperties, setAllProperties] = useState<Property[]>([]);
 
   // View Mode: 'grid' (classic catalog), 'split' (map + cards side-by-side), 'map' (full map with overlay cards)
-  const [viewMode, setViewMode] = useState<'grid' | 'split' | 'map'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'split' | 'map'>('split');
 
   // Filters State
   const [searchQuery, setSearchQuery] = useState('');
@@ -71,6 +72,7 @@ export default function Listings() {
 
   // Mobile drawer state
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [showGuideModal, setShowGuideModal] = useState(false);
 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -259,18 +261,31 @@ export default function Listings() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
           <span className="text-xs font-bold text-accent uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-            <Sparkles className="h-3.5 w-3.5" /> Exclusive Living Portfolio
+            <Sparkles className="h-3.5 w-3.5" /> Interactive Residences Map & Search
           </span>
           <h1 className="font-poppins text-3xl sm:text-4xl font-extrabold text-primary tracking-tight">
-            Residences & Penthouses
+            Exclusive Living Portfolio
           </h1>
           <p className="text-sm text-slate-500 font-light max-w-2xl mt-1">
-            Discover luxury residences with verified layout specifications, neighborhood discovery, and prime Canadian locations.
+            Discover luxury residences with interactive geographic markers, verified layout specifications, and comprehensive nearby neighborhood discovery.
           </p>
         </div>
 
         {/* View Mode Switcher Pills */}
         <div className="flex items-center gap-2 self-start md:self-auto bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80 shrink-0">
+          <button
+            type="button"
+            onClick={() => setViewMode('split')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-poppins font-bold transition-all cursor-pointer ${
+              viewMode === 'split'
+                ? 'bg-white text-primary shadow-md'
+                : 'text-slate-500 hover:text-primary hover:bg-white/50'
+            }`}
+          >
+            <Columns className="h-4 w-4 text-accent" />
+            <span className="hidden sm:inline">Split View</span>
+          </button>
+          
           <button
             type="button"
             onClick={() => setViewMode('grid')}
@@ -286,26 +301,26 @@ export default function Listings() {
 
           <button
             type="button"
-            onClick={() => setViewMode(viewMode === 'split' ? 'grid' : 'split')}
-            title="Toggle Map Location"
-            className={`flex items-center justify-center p-2 rounded-xl text-xs font-poppins font-bold transition-all cursor-pointer ${
-              viewMode === 'split' || viewMode === 'map'
-                ? 'bg-white text-primary shadow-md ring-1 ring-accent/30'
+            onClick={() => setViewMode('map')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-poppins font-bold transition-all cursor-pointer ${
+              viewMode === 'map'
+                ? 'bg-white text-primary shadow-md'
                 : 'text-slate-500 hover:text-primary hover:bg-white/50'
             }`}
           >
             <Map className="h-4 w-4 text-accent" />
+            <span className="hidden sm:inline">Full Map</span>
           </button>
 
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedLocation || 'Canada Luxury Real Estate')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Open Locations in Google Maps"
-            className="flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-accent hover:bg-white/80 transition-all cursor-pointer"
+          <button
+            type="button"
+            onClick={() => setShowGuideModal(true)}
+            title="How to Use Map & Search"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-poppins font-semibold text-slate-600 bg-white hover:text-accent hover:border-accent border border-slate-200 shadow-xs transition-all cursor-pointer ml-1"
           >
-            <ExternalLink className="h-4 w-4" />
-          </a>
+            <HelpCircle className="h-4 w-4 text-accent" />
+            <span className="hidden sm:inline">Map Guide</span>
+          </button>
         </div>
       </div>
 
@@ -1051,6 +1066,141 @@ export default function Listings() {
                 </button>
               </div>
             </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ================= MAP & SEARCH INTERACTIVE USER GUIDE MODAL ================= */}
+      <AnimatePresence>
+        {showGuideModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowGuideModal(false)}
+              className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50"
+            />
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                className="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-2xl w-full p-6 sm:p-8 space-y-6 relative max-h-[90vh] overflow-y-auto scrollbar-thin"
+              >
+                {/* Close Button */}
+                <button
+                  onClick={() => setShowGuideModal(false)}
+                  className="absolute top-6 right-6 p-1.5 rounded-full text-slate-400 hover:text-primary hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                {/* Header */}
+                <div>
+                  <span className="text-[10px] font-bold text-accent uppercase tracking-widest flex items-center gap-1 mb-1">
+                    <Sparkles className="h-3 w-3" /> Quick User Guide
+                  </span>
+                  <h3 className="font-poppins text-2xl font-extrabold text-primary">
+                    How to Use the Interactive Map & Search
+                  </h3>
+                  <p className="text-xs text-slate-500 font-light mt-1 leading-relaxed">
+                    Explore available suites geographically, find nearby landmarks, and discover your next home with ease.
+                  </p>
+                </div>
+
+                {/* Feature Steps Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Step 1: Split & Map Views */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-primary text-accent text-xs font-bold font-poppins">
+                        1
+                      </span>
+                      <h4 className="font-poppins font-bold text-xs text-primary">Choose Your View</h4>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                      Toggle between <strong>Split View</strong> (map alongside listings), <strong>Grid Catalog</strong> (cards only), and <strong>Full Map</strong> (large map with bottom slider).
+                    </p>
+                  </div>
+
+                  {/* Step 2: Interactive Pins */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-accent text-primary text-xs font-bold font-poppins">
+                        2
+                      </span>
+                      <h4 className="font-poppins font-bold text-xs text-primary">Click & Hover Markers</h4>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                      Each gold pin displays the monthly rent. Click any marker to open a preview photo card with key specs and a direct link to the details page.
+                    </p>
+                  </div>
+
+                  {/* Step 3: Two-Way Sync */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-primary text-white text-xs font-bold font-poppins">
+                        3
+                      </span>
+                      <h4 className="font-poppins font-bold text-xs text-primary">2-Way Synchronization</h4>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                      Hovering a listing card lights up its pin on the map. Clicking a pin scrolls straight to its listing card in the split column.
+                    </p>
+                  </div>
+
+                  {/* Step 4: Landmark POIs */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-600 text-white text-xs font-bold font-poppins">
+                        4
+                      </span>
+                      <h4 className="font-poppins font-bold text-xs text-primary">Discover Nearby POIs</h4>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                      Click the <strong>Nearby POIs</strong> button to view local schools, transit hubs, hospitals, shopping, parks, and dining with calculated walking times.
+                    </p>
+                  </div>
+
+                  {/* Step 5: Advanced Filters */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-indigo-600 text-white text-xs font-bold font-poppins">
+                        5
+                      </span>
+                      <h4 className="font-poppins font-bold text-xs text-primary">Multi-Criteria Filters</h4>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                      Refine by city, neighborhood, budget slider, bedrooms, bathrooms, square footage, and amenities. Markers update dynamically.
+                    </p>
+                  </div>
+
+                  {/* Step 6: Map Controls */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-purple-600 text-white text-xs font-bold font-poppins">
+                        6
+                      </span>
+                      <h4 className="font-poppins font-bold text-xs text-primary">Map Theme & Zoom</h4>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                      Use the top-right map controls to switch between <strong>Luxury Light</strong> and <strong>Dark mode</strong>, re-center the map, or enter <strong>Fullscreen</strong>.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Footer Action */}
+                <div className="pt-2 flex justify-end">
+                  <button
+                    onClick={() => setShowGuideModal(false)}
+                    className="px-6 py-2.5 rounded-xl bg-primary text-white hover:bg-accent hover:text-primary font-poppins font-bold text-xs shadow-md transition-all cursor-pointer"
+                  >
+                    Got It, Start Exploring
+                  </button>
+                </div>
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
