@@ -10,7 +10,8 @@ import {
   X, 
   LayoutGrid, 
   Columns, 
-  Map, 
+  Map,
+  MapPin, 
   Compass, 
   Sparkles,
   HelpCircle
@@ -709,7 +710,26 @@ export default function Listings() {
           {viewMode === 'split' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               {/* Left/Top Interactive Map Canvas (6 cols) */}
-              <div className="lg:col-span-6 lg:sticky lg:top-28">
+              <div className="lg:col-span-6 lg:sticky lg:top-28 space-y-2.5">
+                {/* Map Header with Map Icon above the map */}
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/15 border border-accent/30 text-accent shadow-xs">
+                      <Map className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-poppins font-bold text-xs text-primary leading-tight flex items-center gap-1.5">
+                        Interactive Map
+                        <span className="text-[9px] font-bold text-accent uppercase tracking-wider bg-accent/10 px-1.5 py-0.5 rounded-md">Live</span>
+                      </h3>
+                      <p className="text-[10px] text-slate-400 font-light">Explore residences and nearby neighborhood amenities</p>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200/80 rounded-xl px-2.5 py-1 shadow-xs flex items-center gap-1">
+                    <MapPin className="h-3 w-3 text-accent" />
+                    {sortedProperties.length} Homes
+                  </span>
+                </div>
                 <PropertyMap
                   properties={sortedProperties}
                   selectedPropertyId={selectedPropertyId}
@@ -786,6 +806,25 @@ export default function Listings() {
           {/* ================= VIEW MODE 3: FULL MAP VIEW ================= */}
           {viewMode === 'map' && (
             <div className="space-y-4">
+              {/* Map Header with Map Icon above the map */}
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/15 border border-accent/30 text-accent shadow-xs">
+                    <Map className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-poppins font-bold text-xs text-primary leading-tight flex items-center gap-1.5">
+                      Geographic Residences Map
+                      <span className="text-[9px] font-bold text-accent uppercase tracking-wider bg-accent/10 px-1.5 py-0.5 rounded-md">Full View</span>
+                    </h3>
+                    <p className="text-[10px] text-slate-400 font-light">Interactive suite markers across Canadian metropolitan areas</p>
+                  </div>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200/80 rounded-xl px-2.5 py-1 shadow-xs flex items-center gap-1">
+                  <MapPin className="h-3 w-3 text-accent" />
+                  {sortedProperties.length} Homes
+                </span>
+              </div>
               <PropertyMap
                 properties={sortedProperties}
                 selectedPropertyId={selectedPropertyId}

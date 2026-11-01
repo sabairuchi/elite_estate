@@ -8,7 +8,7 @@ import {
   RotateCcw, 
   Plus, 
   Minus,
-  Navigation,
+  Map as MapIcon,
   Info
 } from 'lucide-react';
 import type { Property, Landmark, LandmarkCategory } from '../../types/property';
@@ -597,7 +597,7 @@ export default function PropertyMap({
       {showCityQuickJump && availableCities.length > 1 && !focusProperty && (
         <div className="absolute top-4 left-4 z-30 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-2xl border border-slate-200/80 shadow-lg overflow-x-auto max-w-[calc(100%-6rem)] no-scrollbar">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1 flex items-center gap-1 shrink-0">
-            <Navigation className="h-3 w-3 text-accent" /> Jump To:
+            <MapIcon className="h-3.5 w-3.5 text-accent" /> Jump To:
           </span>
           <button
             onClick={() => handleCityJump('all')}

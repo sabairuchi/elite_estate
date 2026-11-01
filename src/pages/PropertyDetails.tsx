@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BedDouble, Bath, Maximize2, MapPin, Heart, Shield, ArrowLeft, 
   CheckCircle2, Calendar, Mail, Phone, Clock, LayoutGrid,
-  ShieldCheck, Compass, Sparkles
+  ShieldCheck, Compass, Sparkles, Map
 } from 'lucide-react';
 import { getProperties, getPublicProperties } from '../utils/db';
 import { getNearbyLandmarksForProperty, getNearbyProperties } from '../data/landmarks';
@@ -443,6 +443,22 @@ export default function PropertyDetails() {
               />
 
               {/* Interactive Neighborhood Map */}
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/15 border border-accent/30 text-accent shadow-xs">
+                    <Map className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-poppins font-bold text-xs text-primary leading-tight">Property Location Map</h3>
+                    <p className="text-[10px] text-slate-400 font-light">Interactive neighborhood coordinates</p>
+                  </div>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200/80 rounded-xl px-2.5 py-1 shadow-xs flex items-center gap-1">
+                  <MapPin className="h-3 w-3 text-accent" />
+                  {property.city}
+                </span>
+              </div>
+
               <div className="rounded-3xl overflow-hidden border border-slate-200/80 shadow-premium">
                 <PropertyMap
                   properties={[property]}
